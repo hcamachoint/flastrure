@@ -95,3 +95,26 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+@bp.route('/search', methods=('GET', 'POST'))
+@login_required
+def search():
+    if request.method == 'POST':
+        title = request.form['title']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            posts = db.execute(
+                "SELECT * FROM post WHERE title LIKE ('%' || :search || '%') OR body LIKE ('%' || :search || '%')",
+                {"search":title}
+            ).fetchall();
+            db.commit()
+            return render_template('blog/search.html', posts=posts)
+
+    return render_template('blog/search.html')

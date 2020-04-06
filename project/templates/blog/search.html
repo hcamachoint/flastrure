@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Posts{% endblock %}</h1>
+  <h1>{% block title %}Search{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('blog.search') }}">Search</a>
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
+    <form method="post" class="form">
+      <div style="display:inline-block;">
+        <input type="text" name="title" placeholder="search by title" style="height:5px">
+        <input type="submit" value="Search" style="height:35px">
+      </div>
+    </form>
   {% endif %}
 {% endblock %}
 
